@@ -56,6 +56,6 @@ describe('alchemy-app routes', () => {
       postId: '1',
       ...testUser
     }
-    expect(response.body).toEqual(expectation)
+    expect(response.body).toEqual([expectation])
   })
 });
