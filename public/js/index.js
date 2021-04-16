@@ -10,7 +10,6 @@ fetch('/api/v1/auth/verify', {
 })
 // take user info and render on screen with form
 .then(json => {
-    console.log('json', json)
     renderLoggedIn(json)
 })
 .catch(() => {
@@ -35,7 +34,8 @@ const renderLoggedIn = (user) => {
     nameHeader.textContent = user.userName;
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-
+//Make a route to post to
+//Make a post request w content from text area
     });
     form.append(text, button)
     root.append(nameHeader, form)
