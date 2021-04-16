@@ -74,4 +74,23 @@ describe('alchemy-app routes', () => {
       }
       expect(response.body).toEqual([expectation])
   })
+
+  it('PATCH updates the caption of a post by one user', async () => {
+    await request(app)
+    .post('/api/v1/post')
+      .send({
+        ...testPost
+      })
+      const response = await request(app)
+      .patch('/api/v1/post/1')
+      .send('testing new caption')
+
+      const expectation = {
+        userName: 'testUser',
+        caption: 'testing new caption',
+        photoUrl: 'http:www.me.com',
+        tags: ['nice', 'this', 'that']
+      }
+      expect(response.body).toEqual([expectation])
+  })
 });
