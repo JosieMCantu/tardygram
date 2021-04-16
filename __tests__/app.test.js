@@ -20,7 +20,7 @@ describe('alchemy-app routes', () => {
     })
   })
 
-  const testUser = {
+  const testPost = {
     userName: 'testUser',
     caption: 'whatever',
     photoUrl: 'http:www.me.com',
@@ -32,12 +32,12 @@ describe('alchemy-app routes', () => {
     const response = await request(app)
       .post('/api/v1/post')
       .send({
-        ...testUser
+        ...testPost
       })
 
     const expectation = {
       postId: '1',
-      ...testUser
+      ...testPost
     }
 
     expect(response.body).toEqual(expectation)
@@ -47,15 +47,31 @@ describe('alchemy-app routes', () => {
     await request(app)
       .post('/api/v1/post')
       .send({
-        ...testUser
+        ...testPost
       })
     const response = await request(app)
       .get('/api/v1/post')
 
     const expectation = {
       postId: '1',
-      ...testUser
+      ...testPost
     }
     expect(response.body).toEqual([expectation])
+  })
+
+  it('GET all posts by id', async () => {
+    await request(app)
+    .post('/api/v1/post')
+      .send({
+        ...testPost
+      })
+      const response = await request(app)
+      .get('/api/v1/post/testUser')
+
+      const expectation = {
+        postId: '1',
+        ...testPost
+      }
+      expect(response.body).toEqual([expectation])
   })
 });
