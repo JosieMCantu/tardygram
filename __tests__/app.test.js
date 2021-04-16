@@ -32,10 +32,7 @@ describe('alchemy-app routes', () => {
     const response = await request(app)
       .post('/api/v1/post')
       .send({
-        userName: 'testUser',
-        caption: 'whatever',
-        photoUrl: 'http:www.me.com',
-        tags: ['nice', 'this', 'that']
+        ...testUser
       })
 
     const expectation = {
@@ -43,6 +40,22 @@ describe('alchemy-app routes', () => {
       ...testUser
     }
 
+    expect(response.body).toEqual(expectation)
+  })
+
+  it('GET should get all posts in the database', async () => {
+    await request(app)
+      .post('/api/v1/post')
+      .send({
+        ...testUser
+      })
+    const response = await request(app)
+      .get('/api/v1/post')
+
+    const expectation = {
+      postId: '1',
+      ...testUser
+    }
     expect(response.body).toEqual(expectation)
   })
 });
