@@ -94,4 +94,25 @@ describe('alchemy-app routes', () => {
       }
       expect(response.body).toEqual(expectation)
   })
+
+  it('DELETE should remove a post from one user', async () => {
+    await request(app)
+    .post('/api/v1/post')
+      .send({
+        ...testPost
+      })
+      const response = await request(app)
+      .delete('/api/v1/post/1')
+      
+      const expectation = {
+        postId: '1',
+        userName: 'testUser',
+        caption: 'testing new caption',
+        photoUrl: 'http:www.me.com',
+        tags: ['nice', 'this', 'that']
+      }
+      expect(response.body).toEqual(expectation)
+
+      
+  })
 });
