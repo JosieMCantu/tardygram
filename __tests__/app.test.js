@@ -61,58 +61,77 @@ describe('alchemy-app routes', () => {
 
   it('GET all posts by id', async () => {
     await request(app)
-    .post('/api/v1/post')
+      .post('/api/v1/post')
       .send({
         ...testPost
       })
-      const response = await request(app)
+    const response = await request(app)
       .get('/api/v1/post/testUser')
 
-      const expectation = {
-        postId: '1',
-        ...testPost
-      }
-      expect(response.body).toEqual([expectation])
+    const expectation = {
+      postId: '1',
+      ...testPost
+    }
+    expect(response.body).toEqual([expectation])
   })
 
   it('PATCH updates the caption of a post by one user', async () => {
     await request(app)
-    .post('/api/v1/post')
+      .post('/api/v1/post')
       .send({
         ...testPost
       })
-      const response = await request(app)
+    const response = await request(app)
       .patch('/api/v1/post/1')
-      .send({caption: 'testing new caption'})
+      .send({ caption: 'testing new caption' })
 
-      const expectation = {
-        postId: '1',
-        userName: 'testUser',
-        caption: 'testing new caption',
-        photoUrl: 'http:www.me.com',
-        tags: ['nice', 'this', 'that']
-      }
-      expect(response.body).toEqual(expectation)
+    const expectation = {
+      postId: '1',
+      userName: 'testUser',
+      caption: 'testing new caption',
+      photoUrl: 'http:www.me.com',
+      tags: ['nice', 'this', 'that']
+    }
+    expect(response.body).toEqual(expectation)
   })
 
   it('DELETE should remove a post from one user', async () => {
     await request(app)
-    .post('/api/v1/post')
+      .post('/api/v1/post')
       .send({
         ...testPost
       })
-      const response = await request(app)
+    const response = await request(app)
       .delete('/api/v1/post/1')
-      
-      const expectation = {
-        postId: '1',
-        userName: 'testUser',
-        caption: 'testing new caption',
-        photoUrl: 'http:www.me.com',
-        tags: ['nice', 'this', 'that']
-      }
-      expect(response.body).toEqual(expectation)
 
-      
+    const expectation = {
+      postId: '1',
+      userName: 'testUser',
+      caption: 'whatever',
+      photoUrl: 'http:www.me.com',
+      tags: ['nice', 'this', 'that']
+    }
+    expect(response.body).toEqual(expectation)
   })
+
+  it('GET the most popular post', async () => {
+    await request(app)
+      .post('/api/v1/post')
+      .send({
+        ...testPost
+      })
+    const response = await request(app)
+      .get('/api/v1/post')
+
+    const expectation = {
+      postId: '1',
+      userName: 'testUser',
+      caption: 'whatever',
+      photoUrl: 'http:www.me.com',
+      tags: ['nice', 'this', 'that']
+    }
+    expect(response.body).toEqual(expectation)
+  })
+
+
 });
