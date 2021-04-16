@@ -83,14 +83,15 @@ describe('alchemy-app routes', () => {
       })
       const response = await request(app)
       .patch('/api/v1/post/1')
-      .send('testing new caption')
+      .send({caption: 'testing new caption'})
 
       const expectation = {
+        postId: '1',
         userName: 'testUser',
         caption: 'testing new caption',
         photoUrl: 'http:www.me.com',
         tags: ['nice', 'this', 'that']
       }
-      expect(response.body).toEqual([expectation])
+      expect(response.body).toEqual(expectation)
   })
 });
