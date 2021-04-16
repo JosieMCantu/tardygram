@@ -9,30 +9,34 @@ fetch('/api/v1/auth/verify', {
     else throw new Error('Not Logged In!');
 })
 // take user info and render on screen with form
-.then(json => renderLoggedIn(json))
+.then(json => {
+    console.log('json', json)
+    renderLoggedIn(json)
+})
 .catch(() => {
-    const root = document.getElementById('root');
     const button = document.createElement('button');
+    button.textContent = 'Login with GitHub';
     button.addEventListener('click', () => {
         window.location.assign('/api/v1/auth/login');
-    })
-    button.textContent = "Log in with Github";
-    root.appendChild(button);
+    });
+
+    document.getElementById('root').appendChild(button);
 })
 
-renderLoggedIn = (user) => {
+const renderLoggedIn = (user) => {
     const root = document.getElementById('root');
     const nameHeader = document.createElement('h1');
     const form = document.createElement('form');
     const text = document.createElement('textarea');
     const button = document.createElement('button');
 
+
     button.textContent = "Post";
-    nameHeader.textContent = user.username;
+    nameHeader.textContent = user.userName;
     form.addEventListener('submit', (e) => {
         e.preventDefault();
 
     });
-    form.appendChild(text, button);
-    root.appendChild(nameHeader, form);
+    form.append(text, button)
+    root.append(nameHeader, form)
 };
