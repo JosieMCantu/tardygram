@@ -3,7 +3,7 @@ const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
 const User = require('../lib/models/User');
-const { post } = require('../lib/app');
+const Post = require('../lib/models/Post');
 
 jest.mock('../lib/middleware/ensureAuth.js', () => (req, res, next) => {
   req.user = { userName: 'testUser', avatar: 'http://www.me.com' };
@@ -135,20 +135,33 @@ describe('Comments routes tests', () => {
   beforeEach(() => {
     return setup(pool);
   });
+  beforeEach(async () => {
+    await User.insert({
+      username: 'testUser',
+      photo: 'http:www.me.com'
+    })
+  })
 
   const testComment = {
-    commentId: '1',
     commentBy: 'testUser',
     postId: '1',
     comment: 'another whatever'
   }
 
   it('POST should create a new comment in th comments database', async () => {
+    await Post.insert({
+      userName: 'testUser',
+      caption: "A picture of me in a house with a rock",
+      photoUrl: "www.images.com/cave",
+      tags: ['house life', 'bhouseats', 'rock']
+    });
+
     const response = await request(app)
-    .post('/api/v1/comments')
-    .send({...testComment})
+      .post('/api/v1/comments')
+      .send({ ...testComment })
 
     const expectation = {
+      commentId: '1',
       ...testComment
     }
     expect(response.body).toEqual(expectation)
