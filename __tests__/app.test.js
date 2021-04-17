@@ -169,13 +169,19 @@ describe('Comments routes tests', () => {
   })
 
   it('DELETE should remove a comment', async () => {
+    await Post.insert({
+      userName: 'testUser',
+      caption: "A picture of me in a house with a rock",
+      photoUrl: "www.images.com/cave",
+      tags: ['house life', 'bhouseats', 'rock']
+    });
     await request(app)
-      .post('/api/v1/comment')
+      .post('/api/v1/comments')
       .send({
         ...testComment
       })
     const response = await request(app)
-      .delete('/api/v1/comment/1')
+      .delete('/api/v1/comments/1')
 
     const expectation = {
       commentId: '1',
