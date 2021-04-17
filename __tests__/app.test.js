@@ -3,13 +3,14 @@ const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
 const User = require('../lib/models/User');
+const { post } = require('../lib/app');
 
 jest.mock('../lib/middleware/ensureAuth.js', () => (req, res, next) => {
   req.user = { userName: 'testUser', avatar: 'http://www.me.com' };
   next();
 });
 
-describe('alchemy-app routes', () => {
+describe('Posts routes tests', () => {
   beforeEach(() => {
     return setup(pool);
   });
@@ -114,24 +115,43 @@ describe('alchemy-app routes', () => {
     expect(response.body).toEqual(expectation)
   })
 
-  it('GET the most popular post', async () => {
-    await request(app)
-      .post('/api/v1/post')
-      .send({
-        ...testPost
-      })
+  // it('GET the most popular post', async () => {
+  //   await request(app)
+  //     .post('/api/v1/post')
+  //     .send({
+  //       ...testPost
+  //     })
+  //   const response = await request(app)
+  //     .get('/api/v1/post')
+
+  //   const expectation = 
+  //   expect(response.body).toEqual(expectation)
+  // })
+
+
+});
+
+describe('Comments routes tests', () => {
+  beforeEach(() => {
+    return setup(pool);
+  });
+
+  const testComment = {
+    commentId: '1',
+    commentBy: 'testUser',
+    postId: '1',
+    comment: 'another whatever'
+  }
+
+  it('POST should create a new comment in th comments database', async () => {
     const response = await request(app)
-      .get('/api/v1/post')
+    .post('/api/v1/comments')
+    .send({...testComment})
 
     const expectation = {
-      postId: '1',
-      userName: 'testUser',
-      caption: 'whatever',
-      photoUrl: 'http:www.me.com',
-      tags: ['nice', 'this', 'that']
+      ...testComment
     }
     expect(response.body).toEqual(expectation)
+
   })
-
-
 });
