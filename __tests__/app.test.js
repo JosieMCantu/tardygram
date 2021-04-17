@@ -167,4 +167,21 @@ describe('Comments routes tests', () => {
     expect(response.body).toEqual(expectation)
 
   })
+
+  it('DELETE should remove a comment', async () => {
+    await request(app)
+      .post('/api/v1/comment')
+      .send({
+        ...testComment
+      })
+    const response = await request(app)
+      .delete('/api/v1/comment/1')
+
+    const expectation = {
+      commentId: '1',
+      ...testComment
+    }
+    expect(response.body).toEqual(expectation)
+  })
+
 });
