@@ -194,3 +194,25 @@ describe('Comments routes tests', () => {
   })
 
 });
+
+describe('Comments routes tests', () => {
+  beforeEach(() => {
+    return setup(pool);
+  });
+  beforeEach(async () => {
+    return await seed();
+  });
+
+  it('GET the most popular post', async () => {
+
+    const response = await request(app)
+      .get('/api/v1/users/popular')
+
+    const expectation = [{"count": "9", "username": "John Doe"}, 
+      {"count": "2", "username": "Jane Doe"}, 
+      {"count": "1", "username": "Brenda Splenda"}]
+
+    expect(response.body).toEqual(expectation)
+  });
+
+});
