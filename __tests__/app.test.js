@@ -4,6 +4,7 @@ const request = require('supertest');
 const app = require('../lib/app');
 const User = require('../lib/models/User');
 const Post = require('../lib/models/Post');
+const seed = require('../lib/utils/seed');
 
 jest.mock('../lib/middleware/ensureAuth.js', () => (req, res, next) => {
   req.user = { userName: 'testUser', avatar: 'http://www.me.com' };
@@ -115,21 +116,23 @@ describe('Posts routes tests', () => {
     expect(response.body).toEqual(expectation)
   })
 
-  // it('GET the most popular post', async () => {
-  //   await request(app)
-  //     .post('/api/v1/post')
-  //     .send({
-  //       ...testPost
-  //     })
-  //   const response = await request(app)
-  //     .get('/api/v1/post')
+  it('GET the most popular post', async () => {
+    await seed();
 
-  //   const expectation = 
-  //   expect(response.body).toEqual(expectation)
-  // })
+    const response = await request(app)
+      .get('/api/v1/post/popular')
 
-
+    const expectation = [
+        { "count": "4", "post": "www.images.com/cave", "postCaption": "A picture of me in a house with a rock", "postId": "1" }, 
+        { "count": "3", "post": "www.images.com/broom", "postCaption": "A picture of me on a boat with a broom", "postId": "2" }, 
+        { "count": "2", "post": "www.images.com/sock", "postCaption": "A picture of a sock", "postId": "10" }, 
+        { "count": "1", "post": "www.images.com/bear", "postCaption": "A picture of me in the woods with a bear", "postId": "4" }, 
+        { "count": "1", "post": "www.images.com/lizard", "postCaption": "A picture of me in a room with a lizard", "postId": "5" }, 
+        { "count": "1", "post": "www.images.com/night", "postCaption": "Me out and about with my girlies", "postId": "7" }]
+    expect(response.body).toEqual(expectation)
+  })
 });
+
 
 describe('Comments routes tests', () => {
   beforeEach(() => {
